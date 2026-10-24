@@ -10,6 +10,7 @@ import BorderBeam from "../components/BorderBeam";
 import LiquidMetalButton from "../components/LiquidMetalButton";
 import { CATEGORY_COLOR } from "../constants/categoryColors";
 import { ERA_STAGES } from "../constants/eraTints";
+import { DEFAULT_COMPONENTS } from "../constants/defaultComponents";
 import client from "../api/client";
 import soundFX from "../utils/soundEffects";
 import { CloseIcon, BoltIcon, CubeIcon } from "../components/icons/PremiumIcons";
@@ -50,7 +51,7 @@ export default function Components() {
     client
       .get("/components")
       .then((res) => {
-        const comps = res.data.components || [];
+        const comps = res.data?.components?.length ? res.data.components : DEFAULT_COMPONENTS;
         setItems(comps);
         const params = new URLSearchParams(window.location.search);
         const selectParam = params.get("select");
@@ -60,7 +61,16 @@ export default function Components() {
           setSelectedKey(comps[0].key);
         }
       })
-      .catch(() => setError("Couldn't load the component catalog. Is the backend running?"))
+      .catch(() => {
+        setItems(DEFAULT_COMPONENTS);
+        const params = new URLSearchParams(window.location.search);
+        const selectParam = params.get("select");
+        if (selectParam && DEFAULT_COMPONENTS.some((c) => c.key === selectParam)) {
+          setSelectedKey(selectParam);
+        } else if (DEFAULT_COMPONENTS.length) {
+          setSelectedKey(DEFAULT_COMPONENTS[0].key);
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 

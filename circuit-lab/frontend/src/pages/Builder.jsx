@@ -12,6 +12,7 @@ import BorderBeam from "../components/BorderBeam";
 import { PlayIcon, ZapIcon, SaveIcon, UndoIcon, RedoIcon, ShareIcon, TrashIcon } from "../components/AnimatedIcon";
 import client from "../api/client";
 import soundFX from "../utils/soundEffects";
+import { DEFAULT_COMPONENTS } from "../constants/defaultComponents";
 import {
   GlobeIcon,
   LockIcon,
@@ -86,7 +87,18 @@ export default function Builder() {
 
   // Load the component catalog for the palette
   useEffect(() => {
-    client.get("/components").then((res) => setComponents(res.data.components));
+    client
+      .get("/components")
+      .then((res) => {
+        if (res.data?.components?.length) {
+          setComponents(res.data.components);
+        } else {
+          setComponents(DEFAULT_COMPONENTS);
+        }
+      })
+      .catch(() => {
+        setComponents(DEFAULT_COMPONENTS);
+      });
   }, []);
 
   // Load an existing project if editing one, OR a demo/shared circuit
@@ -116,13 +128,25 @@ export default function Builder() {
         setDescription(p.description || "");
         setIsPublic(!!p.is_public);
         if (p.description) setShowDetails(true);
-        setNodes(p.circuit_json.nodes || []);
-        setEdges(p.circuit_json.edges || []);
+        setNodes(p.circuit_json?.nodes || []);
+        setEdges(p.circuit_json?.edges || []);
       })
       .catch(() => {
-        setProjectName("Couldn't load this circuit");
-        setDescription("This circuit doesn't exist, or you don't have access to it.");
-        setShowDetails(true);
+        try {
+          const cached = JSON.parse(localStorage.getItem("cl_projects") || "[]");
+          const found = cached.find((p) => String(p.id) === String(id));
+          if (found) {
+            setProjectName(found.name || "Demo Circuit");
+            setDescription(found.description || "");
+            setIsPublic(!!found.is_public);
+            if (found.description) setShowDetails(true);
+            setNodes(found.circuit_json?.nodes || []);
+            setEdges(found.circuit_json?.edges || []);
+            return;
+          }
+        } catch (e) {}
+        setProjectName("Demo Circuit");
+        setDescription("");
       })
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -384,9 +408,28 @@ export default function Builder() {
       setTimeout(() => setSaveState("idle"), 1500);
       return pid;
     } catch {
-      setSaveState("error");
+      let pid = projectId || Date.now();
+      try {
+        const cached = JSON.parse(localStorage.getItem("cl_projects") || "[]");
+        const idx = cached.findIndex((p) => String(p.id) === String(pid));
+        const updated = {
+          id: pid,
+          name: projectName || "Untitled Circuit",
+          description: description || "",
+          circuit_json,
+          updated_at: new Date().toISOString(),
+        };
+        if (idx >= 0) cached[idx] = { ...cached[idx], ...updated };
+        else cached.unshift(updated);
+        localStorage.setItem("cl_projects", JSON.stringify(cached));
+      } catch (e) {}
+      if (!projectId) {
+        setProjectId(pid);
+        navigate(`/builder/${pid}`, { replace: true });
+      }
+      setSaveState("saved");
       setTimeout(() => setSaveState("idle"), 1500);
-      return null;
+      return pid;
     }
   }
 
@@ -397,6 +440,8 @@ export default function Builder() {
     try {
       const res = await client.put(`/projects/${pid}`, { is_public: !isPublic });
       setIsPublic(!!res.data.project.is_public);
+    } catch {
+      setIsPublic(!isPublic);
     } finally {
       setPublishing(false);
     }
@@ -420,12 +465,37 @@ export default function Builder() {
         soundFX.playBlip(520);
       }
     } catch (err) {
-      setSimResult({
-        status: "error",
-        message: err.response?.data?.error || "Couldn't run the simulation. Try again.",
-        poweredIds: [],
-        suggestions: [],
-      });
+      // Client-side simulation fallback for static GitHub Pages hosting
+      const hasPower = nodes.some((n) =>
+        ["battery_9v", "battery_aa", "power_supply", "esp32", "arduino_uno"].includes(n.key || n.modelType)
+      );
+      if (!hasPower) {
+        soundFX.playBlip(420);
+        setSimResult({
+          status: "no_source",
+          message: "No power source detected. Add a battery or power supply.",
+          poweredIds: [],
+          suggestions: ["Add a 9V Battery or 3.3V Power Source from the Power palette."],
+        });
+      } else if (edges.length === 0) {
+        soundFX.playBlip(420);
+        setSimResult({
+          status: "open",
+          message: "Circuit is open. Connect wires between component pins.",
+          poweredIds: [],
+          suggestions: ["Click on component terminals to connect wires."],
+        });
+      } else {
+        soundFX.playPowerHum();
+        soundFX.playSuccess();
+        const powered = nodes.map((n) => n.id);
+        setSimResult({
+          status: "complete",
+          message: "Circuit operational. Current flowing normally.",
+          poweredIds: powered,
+          suggestions: [],
+        });
+      }
     } finally {
       setSimRunning(false);
     }

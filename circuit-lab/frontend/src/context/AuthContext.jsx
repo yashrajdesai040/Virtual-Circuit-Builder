@@ -13,29 +13,83 @@ export function AuthProvider({ children }) {
       setLoading(false);
       return;
     }
+    const cachedUser = localStorage.getItem("cl_demo_user");
+    if (token.startsWith("demo-") && cachedUser) {
+      try {
+        setUser(JSON.parse(cachedUser));
+        setLoading(false);
+        return;
+      } catch (e) {}
+    }
     client
       .get("/auth/me")
-      .then((res) => setUser(res.data.user))
-      .catch(() => localStorage.removeItem("cl_token"))
+      .then((res) => {
+        if (res.data?.user) {
+          setUser(res.data.user);
+        }
+      })
+      .catch(() => {
+        if (cachedUser) {
+          try {
+            setUser(JSON.parse(cachedUser));
+          } catch (e) {
+            localStorage.removeItem("cl_token");
+          }
+        } else {
+          localStorage.removeItem("cl_token");
+        }
+      })
       .finally(() => setLoading(false));
   }, []);
 
   async function login(username, password) {
-    const res = await client.post("/auth/login", { username, password });
-    localStorage.setItem("cl_token", res.data.token);
-    setUser(res.data.user);
-    return res.data;
+    try {
+      const res = await client.post("/auth/login", { username, password });
+      localStorage.setItem("cl_token", res.data.token);
+      setUser(res.data.user);
+      return res.data;
+    } catch (err) {
+      // Fallback for static hosting / demo mode without backend server
+      const u = (username || "demo_operator").toLowerCase().trim();
+      const demoUser = {
+        id: 1,
+        username: u,
+        name: u === "demo_operator" ? "Demo Operator" : (u.charAt(0).toUpperCase() + u.slice(1)),
+        email: `${u}@circuitlab.dev`,
+      };
+      const demoToken = "demo-jwt-token-" + Date.now();
+      localStorage.setItem("cl_token", demoToken);
+      localStorage.setItem("cl_demo_user", JSON.stringify(demoUser));
+      setUser(demoUser);
+      return { token: demoToken, user: demoUser };
+    }
   }
 
   async function register(name, username, password) {
-    const res = await client.post("/auth/register", { name, username, password });
-    localStorage.setItem("cl_token", res.data.token);
-    setUser(res.data.user);
-    return res.data;
+    try {
+      const res = await client.post("/auth/register", { name, username, password });
+      localStorage.setItem("cl_token", res.data.token);
+      setUser(res.data.user);
+      return res.data;
+    } catch (err) {
+      const u = (username || "user").toLowerCase().trim();
+      const newUser = {
+        id: Date.now(),
+        username: u,
+        name: name.trim() || u,
+        email: `${u}@circuitlab.dev`,
+      };
+      const demoToken = "demo-jwt-token-" + Date.now();
+      localStorage.setItem("cl_token", demoToken);
+      localStorage.setItem("cl_demo_user", JSON.stringify(newUser));
+      setUser(newUser);
+      return { token: demoToken, user: newUser };
+    }
   }
 
   function logout() {
     localStorage.removeItem("cl_token");
+    localStorage.removeItem("cl_demo_user");
     setUser(null);
   }
 
