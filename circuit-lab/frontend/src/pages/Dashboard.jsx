@@ -280,66 +280,71 @@ export default function Dashboard() {
   const [toast, setToast] = useState(null);
 
   function loadProjects() {
+    setLoading(true);
+    const defaultProjects = [
+      {
+        id: 101,
+        name: "ESP32 Blink & LED Array",
+        description: "Interactive ESP32 micro-controller board wired to multi-color LEDs with PWM control.",
+        last_run_status: "complete",
+        updated_at: new Date().toISOString(),
+        is_public: true,
+        circuit_json: {
+          nodes: [
+            { id: "n1", type: "esp32", position: { x: -2, y: 0, z: 0 } },
+            { id: "n2", type: "breadboard", position: { x: 2, y: 0, z: 0 } },
+            { id: "n3", type: "led", position: { x: 2, y: 0.5, z: -1 } },
+            { id: "n4", type: "resistor", position: { x: 2, y: 0.5, z: 1 } },
+          ],
+          edges: [
+            { id: "e1", sourceId: "n1", sourceTerminal: "GPIO2", targetId: "n3", targetTerminal: "anode" },
+            { id: "e2", sourceId: "n3", sourceTerminal: "cathode", targetId: "n4", targetTerminal: "pin1" },
+            { id: "e3", sourceId: "n4", sourceTerminal: "pin2", targetId: "n1", targetTerminal: "GND" },
+          ],
+        },
+      },
+      {
+        id: 102,
+        name: "Basic 9V DC Circuit",
+        description: "DC voltage source with current-limiting resistor and indicator LED.",
+        last_run_status: "complete",
+        updated_at: new Date().toISOString(),
+        is_public: false,
+        circuit_json: {
+          nodes: [
+            { id: "n1", type: "battery_9v", position: { x: -2, y: 0, z: 0 } },
+            { id: "n2", type: "resistor", position: { x: 0, y: 0, z: 0 } },
+            { id: "n3", type: "led", position: { x: 2, y: 0, z: 0 } },
+          ],
+          edges: [
+            { id: "e1", sourceId: "n1", sourceTerminal: "pos", targetId: "n2", targetTerminal: "pin1" },
+            { id: "e2", sourceId: "n2", sourceTerminal: "pin2", targetId: "n3", targetTerminal: "anode" },
+            { id: "e3", sourceId: "n3", sourceTerminal: "cathode", targetId: "n1", targetTerminal: "neg" },
+          ],
+        },
+      },
+    ];
+
     client
       .get("/projects")
       .then((res) => {
-        if (res.data?.projects) {
+        if (Array.isArray(res.data?.projects)) {
           setProjects(res.data.projects);
           return;
         }
-        throw new Error("No projects");
+        throw new Error("No projects array");
       })
       .catch(() => {
         const saved = localStorage.getItem("cl_projects");
         if (saved) {
           try {
-            setProjects(JSON.parse(saved));
-            return;
+            const parsed = JSON.parse(saved);
+            if (Array.isArray(parsed) && parsed.length) {
+              setProjects(parsed);
+              return;
+            }
           } catch (e) {}
         }
-        const defaultProjects = [
-          {
-            id: 101,
-            name: "ESP32 Blink & LED Array",
-            description: "Interactive ESP32 micro-controller board wired to multi-color LEDs with PWM control.",
-            last_run_status: "complete",
-            updated_at: new Date().toISOString(),
-            is_public: true,
-            circuit_json: {
-              nodes: [
-                { id: "n1", type: "esp32", position: { x: -2, y: 0, z: 0 } },
-                { id: "n2", type: "breadboard", position: { x: 2, y: 0, z: 0 } },
-                { id: "n3", type: "led", position: { x: 2, y: 0.5, z: -1 } },
-                { id: "n4", type: "resistor", position: { x: 2, y: 0.5, z: 1 } },
-              ],
-              edges: [
-                { id: "e1", sourceId: "n1", sourceTerminal: "GPIO2", targetId: "n3", targetTerminal: "anode" },
-                { id: "e2", sourceId: "n3", sourceTerminal: "cathode", targetId: "n4", targetTerminal: "pin1" },
-                { id: "e3", sourceId: "n4", sourceTerminal: "pin2", targetId: "n1", targetTerminal: "GND" },
-              ],
-            },
-          },
-          {
-            id: 102,
-            name: "Basic 9V DC Circuit",
-            description: "DC voltage source with current-limiting resistor and indicator LED.",
-            last_run_status: "complete",
-            updated_at: new Date().toISOString(),
-            is_public: false,
-            circuit_json: {
-              nodes: [
-                { id: "n1", type: "battery_9v", position: { x: -2, y: 0, z: 0 } },
-                { id: "n2", type: "resistor", position: { x: 0, y: 0, z: 0 } },
-                { id: "n3", type: "led", position: { x: 2, y: 0, z: 0 } },
-              ],
-              edges: [
-                { id: "e1", sourceId: "n1", sourceTerminal: "pos", targetId: "n2", targetTerminal: "pin1" },
-                { id: "e2", sourceId: "n2", sourceTerminal: "pin2", targetId: "n3", targetTerminal: "anode" },
-                { id: "e3", sourceId: "n3", sourceTerminal: "cathode", targetId: "n1", targetTerminal: "neg" },
-              ],
-            },
-          },
-        ];
         setProjects(defaultProjects);
         localStorage.setItem("cl_projects", JSON.stringify(defaultProjects));
       })
@@ -445,37 +450,39 @@ export default function Dashboard() {
     }
   }
 
+  const safeProjects = useMemo(() => (Array.isArray(projects) ? projects : []), [projects]);
+
   const stats = useMemo(() => {
-    const totalComponents = projects.reduce((sum, p) => sum + (p.circuit_json?.nodes?.length || 0), 0);
-    const totalRuns = projects.reduce((sum, p) => sum + (p.run_count || 0), 0);
-    return { active: projects.length, totalComponents, totalRuns };
-  }, [projects]);
+    const totalComponents = safeProjects.reduce((sum, p) => sum + (p.circuit_json?.nodes?.length || 0), 0);
+    const totalRuns = safeProjects.reduce((sum, p) => sum + (p.run_count || 0), 0);
+    return { active: safeProjects.length, totalComponents, totalRuns };
+  }, [safeProjects]);
 
   const recentActivity = useMemo(() => {
-    return projects
+    return safeProjects
       .filter((p) => p.last_run_at)
       .sort((a, b) => new Date(b.last_run_at) - new Date(a.last_run_at))
       .slice(0, 6);
-  }, [projects]);
+  }, [safeProjects]);
 
   const visibleProjects = useMemo(() => {
-    let list = projects;
+    let list = safeProjects;
     if (query.trim()) {
       const q = query.trim().toLowerCase();
       list = list.filter(
-        (p) => p.name.toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q)
+        (p) => (p.name || "").toLowerCase().includes(q) || (p.description || "").toLowerCase().includes(q)
       );
     }
     list = [...list];
     if (sortBy === "name") {
-      list.sort((a, b) => a.name.localeCompare(b.name));
+      list.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
     } else if (sortBy === "components") {
       list.sort((a, b) => (b.circuit_json?.nodes?.length || 0) - (a.circuit_json?.nodes?.length || 0));
     } else {
-      list.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+      list.sort((a, b) => new Date(b.updated_at || 0) - new Date(a.updated_at || 0));
     }
     return list;
-  }, [projects, query, sortBy]);
+  }, [safeProjects, query, sortBy]);
 
   return (
     <AppShell>

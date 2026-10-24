@@ -2,6 +2,7 @@ import { HashRouter, Routes, Route, Navigate, useLocation } from "react-router-d
 import { AnimatePresence } from "framer-motion";
 import { ThemeProvider } from "./context/ThemeContext";
 import { AuthProvider } from "./context/AuthContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 import ProtectedRoute from "./components/ProtectedRoute";
 import CustomCursor from "./components/CustomCursor";
 import PageTransition from "./components/PageTransition";
@@ -123,13 +124,15 @@ function AnimatedRoutes() {
 
 export default function App() {
   return (
-    <HashRouter>
-      <ThemeProvider>
-        <CustomCursor />
-        <AuthProvider>
-          <AnimatedRoutes />
-        </AuthProvider>
-      </ThemeProvider>
-    </HashRouter>
+    <ErrorBoundary>
+      <HashRouter>
+        <ThemeProvider>
+          <CustomCursor />
+          <AuthProvider>
+            <AnimatedRoutes />
+          </AuthProvider>
+        </ThemeProvider>
+      </HashRouter>
+    </ErrorBoundary>
   );
 }

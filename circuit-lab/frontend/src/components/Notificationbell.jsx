@@ -13,8 +13,14 @@ export default function NotificationBell() {
   function load() {
     client
       .get("/invites")
-      .then((res) => setInvites(res.data.invites))
-      .catch((err) => console.error("Failed to load invites:", err));
+      .then((res) => {
+        if (Array.isArray(res.data?.invites)) {
+          setInvites(res.data.invites);
+        } else {
+          setInvites([]);
+        }
+      })
+      .catch(() => setInvites([]));
   }
 
   useEffect(() => {
@@ -27,16 +33,19 @@ export default function NotificationBell() {
     setRespondingId(inviteId);
     try {
       await client.post(`/invites/${inviteId}/${action}`);
-      setInvites((inv) => inv.filter((i) => i.id !== inviteId));
+      setInvites((inv) => (Array.isArray(inv) ? inv.filter((i) => i.id !== inviteId) : []));
       if (action === "accept") {
         window.dispatchEvent(new Event("project-invite-accepted"));
       }
+    } catch {
+      setInvites((inv) => (Array.isArray(inv) ? inv.filter((i) => i.id !== inviteId) : []));
     } finally {
       setRespondingId(null);
     }
   }
 
-  const hasPending = invites.length > 0;
+  const safeInvites = Array.isArray(invites) ? invites : [];
+  const hasPending = safeInvites.length > 0;
 
   return (
     <div style={{ position: "relative" }}>
@@ -61,7 +70,7 @@ export default function NotificationBell() {
         {hasPending && (
           <span style={styles.badgeWrap}>
             <span style={styles.badgePing} />
-            <span style={styles.badgeDot}>{invites.length}</span>
+            <span style={styles.badgeDot}>{safeInvites.length}</span>
           </span>
         )}
       </motion.button>
@@ -83,12 +92,12 @@ export default function NotificationBell() {
                 </span>
                 {hasPending && (
                   <span style={styles.pendingChip}>
-                    {invites.length} pending
+                    {safeInvites.length} pending
                   </span>
                 )}
               </div>
 
-              {invites.length === 0 && (
+              {safeInvites.length === 0 && (
                 <div style={styles.emptyWrap}>
                   <div style={styles.emptyIcon}>
                     <CheckIcon size={20} color="#FFFFFF" strokeWidth={2.5} />
@@ -103,7 +112,7 @@ export default function NotificationBell() {
               )}
 
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                {invites.map((inv) => (
+                {safeInvites.map((inv) => (
                   <motion.div
                     key={inv.id}
                     layout

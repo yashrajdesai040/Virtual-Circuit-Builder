@@ -24,8 +24,12 @@ export function AuthProvider({ children }) {
     client
       .get("/auth/me")
       .then((res) => {
-        if (res.data?.user) {
+        if (res.data && typeof res.data === "object" && res.data.user) {
           setUser(res.data.user);
+        } else if (cachedUser) {
+          try {
+            setUser(JSON.parse(cachedUser));
+          } catch (e) {}
         }
       })
       .catch(() => {
