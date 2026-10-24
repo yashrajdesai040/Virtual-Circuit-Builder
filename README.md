@@ -1,6 +1,7 @@
 # ⚡ Virtual Circuit Builder (CircuitLab)
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-GitHub%20Pages-2ea44f?style=for-the-badge&logo=github&logoColor=white)](https://yashrajdesai040.github.io/Virtual-Circuit-Builder/)
+[![Deploy with Vercel](https://img.shields.io/badge/Deploy%20with-Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://vercel.com/new/git/external?url=https://github.com/yashrajdesai040/Virtual-Circuit-Builder)
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Three.js](https://img.shields.io/badge/Three.js-0.166-000000?style=flat-square&logo=three.js&logoColor=white)](https://threejs.org/)
