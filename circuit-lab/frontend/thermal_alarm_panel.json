@@ -1,0 +1,81 @@
+{
+  "name": "Industrial Thermal Monitoring & Alarm Panel",
+  "description": "A resistor-divider temperature sensor feeds an ESP32 ADC pin. Firmware implements a three-tier annunciator pattern (Normal / Warning / Critical) with PWM-ramped warning brightness and a hysteresis band to prevent alarm chatter near the threshold - the same control pattern used in real equipment monitoring panels.",
+  "is_public": true,
+  "circuit_json": {
+    "nodes": [
+      {
+        "id": "esp1", "key": "esp32", "name": "ESP32 Dev Board", "category": "board",
+        "unit": "V", "default_value": 3.3, "modelType": "dev_board",
+        "code": "// Industrial Thermal Monitoring & Alarm Panel\n// -----------------------------------------------\n// Sensor: resistor-divider on GPIO34 (thermistor + fixed resistor).\n// NOTE: this simulator models the thermistor as a fixed resistance, not\n// a live temperature input - to see different alarm states, change the\n// divider resistor's value in the builder and re-run.\n//\n// Outputs:\n//   GPIO2  - Normal indicator (solid green when below WARN_THRESHOLD)\n//   GPIO4  - Warning indicator (PWM-ramped amber, brighter as reading rises)\n//   GPIO5  - Critical indicator (solid red above CRIT_THRESHOLD)\n//   GPIO18 - Piezo alarm (on only in Critical state)\n//\n// A hysteresis band (HYSTERESIS) keeps the panel from flickering between\n// states when the reading sits right at a threshold - it must clear the\n// threshold by that margin before switching states, both rising and falling.\n\nint SENSOR_PIN = 34;\nint LED_NORMAL = 2;\nint LED_WARNING = 4;\nint LED_CRITICAL = 5;\nint BUZZER_PIN = 18;\n\nint WARN_THRESHOLD = 1800;   // out of 4095 (12-bit ADC)\nint CRIT_THRESHOLD = 3000;\nint HYSTERESIS = 100;\n\nint state = 0; // 0 = normal, 1 = warning, 2 = critical\n\nvoid setup() {\n  pinMode(LED_NORMAL, OUTPUT);\n  pinMode(LED_WARNING, OUTPUT);\n  pinMode(LED_CRITICAL, OUTPUT);\n  pinMode(BUZZER_PIN, OUTPUT);\n  Serial.begin(115200);\n}\n\nvoid loop() {\n  int reading = analogRead(SENSOR_PIN);\n\n  // state machine with hysteresis - only cross a threshold once we're\n  // clearly past it, in whichever direction we're currently moving\n  if (state == 0 && reading > WARN_THRESHOLD + HYSTERESIS) {\n    state = 1;\n  } else if (state == 1 && reading > CRIT_THRESHOLD + HYSTERESIS) {\n    state = 2;\n  } else if (state == 1 && reading < WARN_THRESHOLD - HYSTERESIS) {\n    state = 0;\n  } else if (state == 2 && reading < CRIT_THRESHOLD - HYSTERESIS) {\n    state = 1;\n  }\n\n  digitalWrite(LED_NORMAL, state == 0 ? HIGH : LOW);\n  digitalWrite(LED_CRITICAL, state == 2 ? HIGH : LOW);\n  digitalWrite(BUZZER_PIN, state == 2 ? HIGH : LOW);\n\n  if (state == 1) {\n    // brightness scales with how far into the warning band we are\n    int span = CRIT_THRESHOLD - WARN_THRESHOLD;\n    int into = reading - WARN_THRESHOLD;\n    int brightness = (into * 255) / span;\n    if (brightness < 40) brightness = 40;   // stay visible even just past threshold\n    if (brightness > 255) brightness = 255;\n    analogWrite(LED_WARNING, brightness);\n  } else {\n    analogWrite(LED_WARNING, 0);\n  }\n\n  Serial.print(\"Reading: \");\n  Serial.print(reading);\n  Serial.print(\" | State: \");\n  Serial.println(state);\n\n  delay(200);\n}\n",
+        "x": 0, "z": 0,
+        "pins": [
+          {"terminal": "3v3", "label": "3V3", "role": "power", "side": "left", "order": 0, "gpio": null, "volts": 3.3},
+          {"terminal": "gnd1", "label": "GND", "role": "ground", "side": "left", "order": 1, "gpio": null, "volts": null},
+          {"terminal": "gpio36", "label": "GPIO36", "role": "gpio", "side": "left", "order": 2, "gpio": 36, "volts": null},
+          {"terminal": "gpio39", "label": "GPIO39", "role": "gpio", "side": "left", "order": 3, "gpio": 39, "volts": null},
+          {"terminal": "gpio34", "label": "GPIO34", "role": "gpio", "side": "left", "order": 4, "gpio": 34, "volts": null},
+          {"terminal": "gpio35", "label": "GPIO35", "role": "gpio", "side": "left", "order": 5, "gpio": 35, "volts": null},
+          {"terminal": "gpio32", "label": "GPIO32", "role": "gpio", "side": "left", "order": 6, "gpio": 32, "volts": null},
+          {"terminal": "gpio33", "label": "GPIO33", "role": "gpio", "side": "left", "order": 7, "gpio": 33, "volts": null},
+          {"terminal": "gpio25", "label": "GPIO25", "role": "gpio", "side": "left", "order": 8, "gpio": 25, "volts": null},
+          {"terminal": "gpio26", "label": "GPIO26", "role": "gpio", "side": "left", "order": 9, "gpio": 26, "volts": null},
+          {"terminal": "gpio27", "label": "GPIO27", "role": "gpio", "side": "left", "order": 10, "gpio": 27, "volts": null},
+          {"terminal": "gpio14", "label": "GPIO14", "role": "gpio", "side": "left", "order": 11, "gpio": 14, "volts": null},
+          {"terminal": "gpio12", "label": "GPIO12", "role": "gpio", "side": "left", "order": 12, "gpio": 12, "volts": null},
+          {"terminal": "gpio13", "label": "GPIO13", "role": "gpio", "side": "left", "order": 13, "gpio": 13, "volts": null},
+          {"terminal": "gpio15", "label": "GPIO15", "role": "gpio", "side": "left", "order": 14, "gpio": 15, "volts": null},
+          {"terminal": "gpio2", "label": "GPIO2", "role": "gpio", "side": "right", "order": 0, "gpio": 2, "volts": null},
+          {"terminal": "gpio4", "label": "GPIO4", "role": "gpio", "side": "right", "order": 1, "gpio": 4, "volts": null},
+          {"terminal": "gpio16", "label": "GPIO16", "role": "gpio", "side": "right", "order": 2, "gpio": 16, "volts": null},
+          {"terminal": "gpio17", "label": "GPIO17", "role": "gpio", "side": "right", "order": 3, "gpio": 17, "volts": null},
+          {"terminal": "gpio5", "label": "GPIO5", "role": "gpio", "side": "right", "order": 4, "gpio": 5, "volts": null},
+          {"terminal": "gpio18", "label": "GPIO18", "role": "gpio", "side": "right", "order": 5, "gpio": 18, "volts": null},
+          {"terminal": "gpio19", "label": "GPIO19", "role": "gpio", "side": "right", "order": 6, "gpio": 19, "volts": null},
+          {"terminal": "gpio21", "label": "GPIO21", "role": "gpio", "side": "right", "order": 7, "gpio": 21, "volts": null},
+          {"terminal": "gpio22", "label": "GPIO22", "role": "gpio", "side": "right", "order": 8, "gpio": 22, "volts": null},
+          {"terminal": "gpio23", "label": "GPIO23", "role": "gpio", "side": "right", "order": 9, "gpio": 23, "volts": null},
+          {"terminal": "gpio1", "label": "GPIO1 (TX0)", "role": "gpio", "side": "right", "order": 10, "gpio": 1, "volts": null},
+          {"terminal": "gpio3", "label": "GPIO3 (RX0)", "role": "gpio", "side": "right", "order": 11, "gpio": 3, "volts": null},
+          {"terminal": "gpio0", "label": "GPIO0", "role": "gpio", "side": "right", "order": 12, "gpio": 0, "volts": null},
+          {"terminal": "vin", "label": "VIN (5V)", "role": "power", "side": "right", "order": 13, "gpio": null, "volts": 5.0},
+          {"terminal": "gnd2", "label": "GND", "role": "ground", "side": "right", "order": 14, "gpio": null, "volts": null}
+        ]
+      },
+      {"id": "therm1", "key": "thermistor", "name": "Thermistor", "category": "sensor", "unit": "kΩ", "default_value": 10, "modelType": "thermistor", "x": -2.5, "z": -1.5},
+      {"id": "rdiv", "key": "resistor", "name": "Divider Resistor", "category": "passive", "unit": "Ω", "default_value": 10000, "modelType": "resistor", "x": -2.5, "z": -0.5},
+
+      {"id": "rn", "key": "resistor", "name": "Normal LED Resistor", "category": "passive", "unit": "Ω", "default_value": 220, "modelType": "resistor", "x": -1, "z": 1.5},
+      {"id": "ln", "key": "led", "name": "Normal LED (Green)", "category": "active", "unit": "V", "default_value": 2.0, "modelType": "led", "x": -0.2, "z": 1.5},
+
+      {"id": "rw", "key": "resistor", "name": "Warning LED Resistor", "category": "passive", "unit": "Ω", "default_value": 220, "modelType": "resistor", "x": 0.8, "z": 1.5},
+      {"id": "lw", "key": "led", "name": "Warning LED (Amber)", "category": "active", "unit": "V", "default_value": 2.0, "modelType": "led", "x": 1.6, "z": 1.5},
+
+      {"id": "rc", "key": "resistor", "name": "Critical LED Resistor", "category": "passive", "unit": "Ω", "default_value": 220, "modelType": "resistor", "x": 2.4, "z": 1.5},
+      {"id": "lc", "key": "led", "name": "Critical LED (Red)", "category": "active", "unit": "V", "default_value": 2.0, "modelType": "led", "x": 3.2, "z": 1.5},
+
+      {"id": "bz", "key": "buzzer", "name": "Alarm Buzzer", "category": "output", "unit": "V", "default_value": 5.0, "modelType": "buzzer", "x": 4, "z": 1.5}
+    ],
+    "edges": [
+      {"id": "e1", "sourceId": "esp1", "sourceTerminal": "3v3", "targetId": "therm1", "targetTerminal": "a"},
+      {"id": "e2", "sourceId": "therm1", "sourceTerminal": "b", "targetId": "rdiv", "targetTerminal": "a"},
+      {"id": "e3", "sourceId": "rdiv", "sourceTerminal": "a", "targetId": "esp1", "targetTerminal": "gpio34"},
+      {"id": "e4", "sourceId": "rdiv", "sourceTerminal": "b", "targetId": "esp1", "targetTerminal": "gnd1"},
+
+      {"id": "e5", "sourceId": "esp1", "sourceTerminal": "gpio2", "targetId": "rn", "targetTerminal": "a"},
+      {"id": "e6", "sourceId": "rn", "sourceTerminal": "b", "targetId": "ln", "targetTerminal": "a"},
+      {"id": "e7", "sourceId": "ln", "sourceTerminal": "b", "targetId": "esp1", "targetTerminal": "gnd1"},
+
+      {"id": "e8", "sourceId": "esp1", "sourceTerminal": "gpio4", "targetId": "rw", "targetTerminal": "a"},
+      {"id": "e9", "sourceId": "rw", "sourceTerminal": "b", "targetId": "lw", "targetTerminal": "a"},
+      {"id": "e10", "sourceId": "lw", "sourceTerminal": "b", "targetId": "esp1", "targetTerminal": "gnd1"},
+
+      {"id": "e11", "sourceId": "esp1", "sourceTerminal": "gpio5", "targetId": "rc", "targetTerminal": "a"},
+      {"id": "e12", "sourceId": "rc", "sourceTerminal": "b", "targetId": "lc", "targetTerminal": "a"},
+      {"id": "e13", "sourceId": "lc", "sourceTerminal": "b", "targetId": "esp1", "targetTerminal": "gnd2"},
+
+      {"id": "e14", "sourceId": "esp1", "sourceTerminal": "gpio18", "targetId": "bz", "targetTerminal": "a"},
+      {"id": "e15", "sourceId": "bz", "sourceTerminal": "b", "targetId": "esp1", "targetTerminal": "gnd2"}
+    ]
+  }
+}

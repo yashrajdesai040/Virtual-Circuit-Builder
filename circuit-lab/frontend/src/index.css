@@ -1,0 +1,1055 @@
+:root,
+[data-theme="dark"],
+.dark {
+  /* ========================================================================
+     Dual-Mode Tokens — Dark Mode: Black & Platinum
+     ======================================================================== */
+  --color-ink: #09090B;         /* Obsidian Black - App Background */
+  --color-paper: #F1F5F9;       /* Bright Platinum - Primary Text */
+  --color-accent: #E2E8F0;      /* Platinum - Primary Action / Accent */
+  --color-ink-soft: #141417;    /* Carbon Matte - Elevated Surface / Card */
+  --color-line: #27272A;        /* Gunmetal - Borders / Hairlines */
+
+  /* UI Aliases wired to Tokens */
+  --bg: #09090B;
+  --surface: #141417;
+  --surface-2: #1C1C21;
+  --surface-3: #24242B;
+  --border: #27272A;
+  --border-bright: rgba(226, 232, 240, 0.28);
+  --border-highlight: #E2E8F0;
+
+  --text: #F1F5F9;
+  --text-dim: #94A3B8;          /* Cool Grey - Muted / Secondary Text */
+  --text-faint: #7C8B9E;        /* Accessible Silver Grey */
+
+  --primary: #F1F5F9;
+  --primary-dim: #E2E8F0;
+  --primary-bright: #FFFFFF;
+  --primary-glow: rgba(226, 232, 240, 0.28);
+  --accent: #E2E8F0;
+  --accent-dim: #CBD5E1;
+  --accent-glow: rgba(226, 232, 240, 0.22);
+  --danger: #EF4444;
+  --gold: #E2E8F0;              /* Re-mapped to Platinum metallic */
+  --platinum: #E2E8F0;
+  --platinum-bright: #FFFFFF;
+  --cyan: #38bdf8;
+  --green: #22C55E;
+  --color-green: #22C55E;
+  --success: #22C55E;
+
+  /* Glassmorphism tokens — Dark Mode (Glass / Floating Nav: rgba(20,20,23,0.75)) */
+  --glass-bg: rgba(20, 20, 23, 0.75);
+  --glass-bg-hover: rgba(28, 28, 33, 0.85);
+  --glass-bg-elevated: rgba(20, 20, 23, 0.92);
+  --glass-surface: rgba(255, 255, 255, 0.04);
+  --glass-border: #27272A;
+  --glass-border-bright: rgba(226, 232, 240, 0.25);
+  --glass-border-accent: rgba(226, 232, 240, 0.42);
+  --glass-blur: 16px;
+  --glass-blur-lg: 24px;
+  --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.65), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  --glass-glow-accent: 0 8px 32px 0 rgba(226, 232, 240, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.25);
+  --card-shadow: 0 16px 48px -12px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  /* Primary CTA Button Tokens */
+  --cta-bg: #E2E8F0;
+  --cta-text: #09090B;
+  --cta-border: #FFFFFF;
+  --cta-hover-bg: #FFFFFF;
+  --cta-shadow: 0 4px 20px rgba(226, 232, 240, 0.28), inset 0 1px 0 #FFFFFF;
+
+  /* Typography */
+  --font-display: "Space Grotesk", -apple-system, sans-serif;
+  --font-body: "Space Grotesk", -apple-system, sans-serif;
+  --font-mono: "Space Mono", monospace;
+  --font-data: "Space Mono", monospace;
+
+  /* Fluid typography scale with clamp() */
+  --text-12: clamp(11.5px, 0.75vw, 12px);
+  --text-14: clamp(13px, 0.85vw, 14px);
+  --text-16: clamp(15.5px, 1vw, 16.5px);
+  --text-18: clamp(17px, 1.15vw, 18px);
+  --text-20: clamp(18px, 1.3vw, 20px);
+  --text-28: clamp(24px, 1.8vw, 28px);
+  --text-40: clamp(32px, 2.7vw, 40px);
+  --text-64: clamp(48px, 4.5vw, 64px);
+  --text-96: clamp(68px, 7vw, 96px);
+  --text-160: clamp(80px, 12vw, 160px);
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  /* Animation Easing Tokens */
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-theme="light"],
+.light {
+  /* ========================================================================
+     Dual-Mode Tokens — Light Mode: Platinum & Black
+     ======================================================================== */
+  --color-ink: #ECEEF2;         /* Brushed Platinum - App Background */
+  --color-paper: #09090B;       /* Jet Black - Primary Text */
+  --color-accent: #09090B;      /* Jet Black - Primary CTA Button / Accent */
+  --color-ink-soft: #F8F9FA;    /* Bright Silver-White - Elevated Surface / Card */
+  --color-line: #CFD4DC;        /* Machined Silver - Borders / Hairlines */
+
+  /* UI Aliases wired to Light Tokens */
+  --bg: #ECEEF2;
+  --surface: #F8F9FA;
+  --surface-2: #EDF0F4;
+  --surface-3: #E2E6EC;
+  --border: #CFD4DC;
+  --border-bright: rgba(9, 9, 11, 0.22);
+  --border-highlight: #09090B;
+
+  --text: #09090B;              /* Jet Black - Primary Text */
+  --text-dim: #4B5262;          /* Gunmetal - Muted / Secondary Text (WCAG AA accessible > 6.5:1) */
+  --text-faint: #606877;        /* Machined Silver - Tertiary Text (WCAG AA accessible > 4.8:1) */
+
+  --primary: #09090B;
+  --primary-dim: #27272A;
+  --primary-bright: #000000;
+  --primary-glow: rgba(9, 9, 11, 0.12);
+  --accent: #09090B;
+  --accent-dim: #3F3F46;
+  --accent-glow: rgba(9, 9, 11, 0.14);
+  --danger: #DC2626;
+  --gold: #09090B;
+  --platinum: #525866;
+  --platinum-bright: #09090B;
+  --cyan: #0284c7;
+  --green: #16A34A;
+  --color-green: #16A34A;
+  --success: #16A34A;
+
+  /* Glassmorphism tokens — Light Mode (Glass / Floating Nav: rgba(248,249,250,0.80)) */
+  --glass-bg: rgba(248, 249, 250, 0.80);
+  --glass-bg-hover: rgba(240, 242, 246, 0.92);
+  --glass-bg-elevated: rgba(248, 249, 250, 0.96);
+  --glass-surface: rgba(0, 0, 0, 0.035);
+  --glass-border: #CFD4DC;
+  --glass-border-bright: rgba(9, 9, 11, 0.22);
+  --glass-border-accent: rgba(9, 9, 11, 0.35);
+  --glass-blur: 12px;
+  --glass-blur-lg: 20px;
+  --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.07), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  --glass-glow-accent: 0 8px 32px 0 rgba(0, 0, 0, 0.10), inset 0 1px 0 0 rgba(255, 255, 255, 0.95);
+  --card-shadow: 0 14px 38px -10px rgba(0, 0, 0, 0.09), inset 0 1px 0 #FFFFFF;
+
+  /* Primary CTA Button Tokens (Light mode: Jet Black button with Platinum text) */
+  --cta-bg: #09090B;
+  --cta-text: #F1F5F9;
+  --cta-border: #27272A;
+  --cta-hover-bg: #18181B;
+  --cta-shadow: 0 4px 18px rgba(9, 9, 11, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-paper);
+  font-family: var(--font-body);
+  font-size: var(--text-16);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--color-paper);
+}
+
+.mono,
+.data-label,
+.eyebrow {
+  font-family: var(--font-data);
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font-family: var(--font-body);
+}
+
+::selection {
+  background: var(--accent-dim);
+  color: #06110f;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input:focus {
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px rgba(229, 228, 226, 0.2);
+}
+
+.gradient-text {
+  background: linear-gradient(105deg, var(--color-paper) 20%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Floating labels above placed 3D components ---- */
+.part3d-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 8px 6px 12px;
+  font-family: var(--font-body);
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  box-shadow: var(--card-shadow);
+  color: var(--text);
+}
+.part3d-label-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.part3d-label-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.part3d-label-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--text);
+}
+.part3d-label-value {
+  font-family: var(--font-display);
+  font-size: 10px;
+  color: var(--text-dim);
+}
+.part3d-label button {
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 4px;
+  margin-left: 2px;
+}
+.part3d-label button:hover {
+  color: var(--danger);
+}
+
+.part3d-polarity {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  text-shadow: 0 0 4px rgba(0,0,0,0.4), 0 0 8px currentColor;
+  user-select: none;
+}
+
+.part3d-toggle {
+  display: block;
+  margin: 4px auto 0;
+  border: none;
+  border-radius: 20px;
+  padding: 2px 12px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--cta-text);
+  background: var(--cta-bg);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.part3d-hover-tag {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 3px 9px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+  box-shadow: var(--card-shadow);
+  letter-spacing: 0.02em;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* ---- Custom cursor: comet trail + targeting reticle + click sparks ---- */
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body.custom-cursor-active,
+body.custom-cursor-active *:not(input):not(textarea):not([contenteditable="true"]) {
+  cursor: none !important;
+}
+
+body.custom-cursor-active input,
+body.custom-cursor-active textarea,
+body.custom-cursor-active [contenteditable="true"] {
+  cursor: text !important;
+}
+
+.cursor-core,
+.cursor-trail,
+.cursor-ring,
+.cursor-spark {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.cursor-core {
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 0 10px var(--primary), 0 0 2px #fff;
+}
+
+.cursor-trail {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--accent);
+}
+
+.cursor-spark {
+  width: 4px;
+  height: 4px;
+  margin: -2px 0 0 -2px;
+  border-radius: 2px;
+  background: var(--primary);
+}
+
+/* ==========================================================================
+   Modern Aceternity / Magic UI / 21st.dev Upgrades & Polish
+   ========================================================================== */
+
+/* Custom smooth dark scrollbar with PCB copper/emerald trace */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-bright);
+  border-radius: 4px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dim);
+}
+
+/* Shimmer animation for buttons and hero highlights */
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-100%) skewX(-15deg);
+  }
+  100% {
+    transform: translateX(250%) skewX(-15deg);
+  }
+}
+
+.shimmer-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 100%
+  );
+  animation: shimmer-sweep 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+
+/* Glowing Border Beam Animation */
+@keyframes border-beam-spin {
+  0% {
+    offset-distance: 0%;
+  }
+  100% {
+    offset-distance: 100%;
+  }
+}
+
+/* Pulse glow for running circuits & status badges */
+@keyframes neon-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 6px var(--primary-glow), 0 0 16px rgba(229, 228, 226, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 14px var(--primary-glow), 0 0 28px rgba(255, 255, 255, 0.35);
+  }
+}
+
+.neon-active {
+  animation: neon-glow-pulse 2.2s infinite ease-in-out;
+}
+
+/* Glassmorphism surfaces & utility classes */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-glow);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: var(--glass-bg-hover);
+  border-color: var(--glass-border-bright);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.glass-modal {
+  background: rgba(18, 20, 26, 0.82);
+  backdrop-filter: blur(24px) saturate(170%);
+  -webkit-backdrop-filter: blur(24px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.75), inset 0 1px 1px rgba(255, 255, 255, 0.18), 0 0 40px rgba(229, 228, 226, 0.08);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.glass-input {
+  background: rgba(14, 16, 20, 0.65) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.glass-input:focus {
+  background: rgba(16, 18, 24, 0.85) !important;
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(229, 228, 226, 0.2), 0 0 20px rgba(229, 228, 226, 0.12) !important;
+}
+
+/* Subtle tech badge */
+.tech-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  font-family: var(--font-data);
+  font-size: var(--text-12);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(229, 228, 226, 0.25);
+  color: var(--color-accent);
+}
+
+/* Input hover and focus glow */
+input, textarea, select {
+  color: var(--text);
+  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              background 0.2s ease !important;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-faint) !important;
+  opacity: 0.85 !important;
+}
+
+input:hover, textarea:hover, select:hover {
+  border-color: var(--border-bright) !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(229, 228, 226, 0.2), 0 0 16px rgba(229, 228, 226, 0.14) !important;
+}
+
+[data-theme="light"] input::placeholder,
+[data-theme="light"] textarea::placeholder,
+.light input::placeholder,
+.light textarea::placeholder {
+  color: #606877 !important;
+  opacity: 0.88 !important;
+}
+
+/* ==========================================================================
+   Animated Buttons & Micro-Interactions (animatedbuttons.colorion.co)
+   ========================================================================== */
+
+/* 3D Tactile Press Button with Platinum Titanium Lip */
+.btn-tactile-gold {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #E5E4E2 100%);
+  color: #07080C;
+  font-family: var(--font-display);
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #94A3B8, 0 8px 24px rgba(255, 255, 255, 0.25);
+  transition: transform 0.1s cubic-bezier(0.2, 0, 0, 1), box-shadow 0.1s cubic-bezier(0.2, 0, 0, 1), filter 0.15s ease;
+  will-change: transform, box-shadow;
+}
+
+.btn-tactile-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #94A3B8, 0 12px 28px rgba(255, 255, 255, 0.35);
+  filter: brightness(1.03);
+}
+
+.btn-tactile-gold:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #64748B, 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Secondary Ghost Button with Expanding Neon Hover */
+.btn-ghost-vibe {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(28, 28, 28, 0.6);
+  color: var(--color-paper);
+  font-family: var(--font-display);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  border: 1px solid var(--color-line);
+  cursor: pointer;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-ghost-vibe:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 16px rgba(229, 228, 226, 0.16);
+  transform: translateY(-1px);
+}
+
+.btn-ghost-vibe:active {
+  transform: translateY(1px);
+}
+
+/* VibePrompts Hotkey Chip */
+.hotkey-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-data);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-bright);
+  color: var(--text-dim);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+  letter-spacing: 0.04em;
+  user-select: none;
+}
+
+/* Animated Shimmer Sweep Button (animatedbuttons.colorion.co & Magic UI) */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shimmer::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.28) 45%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.28) 55%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  animation: btnShimmerSweep 3.6s infinite cubic-bezier(0.19, 1, 0.22, 1);
+  pointer-events: none;
+}
+
+@keyframes btnShimmerSweep {
+  0% { transform: translateX(-120%) rotate(25deg); }
+  35%, 100% { transform: translateX(140%) rotate(25deg); }
+}
+
+/* Telemetry Badge (Space Mono + glowing status indicator) */
+.telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-data);
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: rgba(28, 28, 28, 0.7);
+  border: 1px solid var(--color-line);
+  color: var(--color-paper);
+}
+
+.telemetry-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent);
+}
+
+.telemetry-dot-green {
+  background: var(--color-green);
+  box-shadow: 0 0 8px var(--color-green);
+}
+
+/* ========================================================================
+   aicss.dev & beautiful-ui: AI Agent Chat Primitives
+   ======================================================================== */
+@keyframes aicss-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.ai-thinking-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 8px 16px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(229, 228, 226, 0.18) 50%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  background-size: 200% 100%;
+  animation: aicss-shimmer 2.2s infinite ease-in-out;
+  border: 1px solid rgba(229, 228, 226, 0.3);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.12);
+}
+
+@keyframes radar-pulse {
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(229, 228, 226, 0.6);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 8px rgba(229, 228, 226, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(229, 228, 226, 0);
+  }
+}
+
+.ai-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-accent);
+  animation: radar-pulse 1.8s infinite;
+}
+
+/* ========================================================================
+   Auth Page Responsive Layout & Sci-Fi Effects
+   ======================================================================== */
+@keyframes laser-sweep {
+  0% {
+    top: 0%;
+    opacity: 0.85;
+  }
+  50% {
+    top: 100%;
+    opacity: 0.35;
+  }
+  100% {
+    top: 0%;
+    opacity: 0.85;
+  }
+}
+
+.laser-scanner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFFFFF, #E5E4E2, #FFFFFF, transparent);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.6), 0 0 28px rgba(229, 228, 226, 0.4);
+  animation: laser-sweep 5s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinOrbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes radarPing {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes meteor {
+  0% {
+    transform: rotate(215deg) translateX(0);
+    opacity: 1;
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(215deg) translateX(-700px);
+    opacity: 0;
+  }
+}
+
+@keyframes shinyText {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.shimmer-sweep {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  transform: skewX(-20deg);
+  animation: shimmerSweep 3.2s infinite ease-in-out;
+  pointer-events: none;
+}
+
+.human-input:focus {
+  border-color: rgba(229, 228, 226, 0.65) !important;
+  box-shadow: 0 0 0 3px rgba(229, 228, 226, 0.16) !important;
+}
+
+.demo-sso-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: rgba(229, 228, 226, 0.35) !important;
+  transform: translateY(-1px);
+}
+
+.demo-sso-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.human-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(255, 255, 255, 0.38), inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+.human-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+@keyframes shimmerSweep {
+  0% {
+    left: -100%;
+  }
+  60%, 100% {
+    left: 200%;
+  }
+}
+
+/* ========================================================================
+   Black & Platinum Auth & Responsive Layout
+   ======================================================================== */
+.platinum-input {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+.platinum-input:focus {
+  border-color: var(--border-highlight) !important;
+  box-shadow: 0 0 0 3px var(--primary-glow) !important;
+  background: var(--surface-2) !important;
+}
+
+.platinum-submit-btn {
+  position: relative;
+  overflow: hidden;
+  background: var(--cta-bg) !important;
+  color: var(--cta-text) !important;
+  box-shadow: var(--cta-shadow) !important;
+  border: 1px solid var(--cta-border) !important;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.platinum-submit-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transform: skewX(-25deg);
+  animation: buttonPlatinumShine 3.6s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes buttonPlatinumShine {
+  0%, 25% {
+    left: -100%;
+  }
+  60%, 100% {
+    left: 200%;
+  }
+}
+
+.platinum-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1.5px) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+  background: var(--cta-hover-bg) !important;
+}
+
+.platinum-submit-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.99) !important;
+}
+
+.platinum-demo-btn {
+  background: var(--glass-surface) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  transition: all 0.18s ease !important;
+}
+
+.platinum-demo-btn:hover:not(:disabled) {
+  background: var(--surface-2) !important;
+  border-color: var(--border-bright) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+}
+
+.platinum-demo-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Light Mode Overrides for stark monochrome clarity */
+[data-theme="light"],
+.light {
+  color-scheme: light;
+}
+
+[data-theme="light"] body,
+.light body {
+  background: #ECEEF2;
+  color: #09090B;
+}
+
+[data-theme="light"] .glass-panel,
+.light .glass-panel,
+[data-theme="light"] .glass-card,
+.light .glass-card {
+  box-shadow: var(--card-shadow);
+  border-color: #CFD4DC;
+}
+
+[data-theme="light"] .glass-modal,
+.light .glass-modal {
+  background: rgba(248, 249, 250, 0.96);
+  border: 1px solid #CFD4DC;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12), inset 0 1px 0 #FFFFFF;
+}
+
+[data-theme="light"] .glass-input,
+.light .glass-input {
+  background: #FFFFFF !important;
+  color: #09090B !important;
+  border-color: #CFD4DC !important;
+}
+
+[data-theme="light"] .glass-input:focus,
+.light .glass-input:focus {
+  background: #FFFFFF !important;
+  border-color: #09090B !important;
+  box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.1) !important;
+}
+
+[data-theme="light"] .btn-ghost-vibe,
+.light .btn-ghost-vibe {
+  background: #F8F9FA;
+  color: #09090B;
+  border-color: #CFD4DC;
+}
+
+[data-theme="light"] .btn-ghost-vibe:hover,
+.light .btn-ghost-vibe:hover {
+  background: #ECEEF2;
+  border-color: #09090B;
+  color: #09090B;
+}
+
+[data-theme="light"] .btn-tactile-gold,
+.light .btn-tactile-gold {
+  background: #09090B;
+  color: #F1F5F9;
+  box-shadow: 0 4px 0 #27272A, 0 8px 24px rgba(9, 9, 11, 0.2);
+}
+
+[data-theme="light"] .btn-tactile-gold:hover,
+.light .btn-tactile-gold:hover {
+  background: #18181B;
+}
+
+[data-theme="light"] .telemetry-badge,
+.light .telemetry-badge {
+  background: #F8F9FA;
+  border-color: #CFD4DC;
+  color: #09090B;
+}
+
+@media (max-width: 960px) {
+  .login-left-showcase {
+    display: none !important;
+  }
+  .login-split-main {
+    justify-content: center !important;
+    padding: 20px 16px 40px !important;
+  }
+  .login-right-section {
+    width: 100% !important;
+    max-width: 440px !important;
+  }
+}
+
+
